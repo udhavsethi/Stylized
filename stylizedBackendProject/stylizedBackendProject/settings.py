@@ -76,6 +76,13 @@ WSGI_APPLICATION = 'stylizedBackendProject.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'stylizedappdb',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'PORT': '8020',
+        
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -106,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'IN'
 
 USE_I18N = True
 
