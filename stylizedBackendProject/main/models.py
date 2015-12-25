@@ -1,20 +1,25 @@
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
 # Create your models here.
 
+@python_2_unicode_compatible
 class Category(models.Model):
 	cat_name = models.CharField(max_length=200)
+	def __str__(self):
+		return self.cat_name
 
+@python_2_unicode_compatible
 class Style(models.Model):
 	category = models.ForeignKey(Category)
 	style_name = models.CharField(max_length=200)
 	suitable_for = models.CharField(max_length=20)		#men/women/children
 	description = models.TextField(blank=True)
 	views = models.IntegerField(default=0)
-
 	def __str__(self):
 		return self.style_name
 
+@python_2_unicode_compatible
 class Salon(models.Model):
 	salon_name = models.CharField(max_length=200)
 	salon_location = models.CharField(max_length=200)
@@ -24,7 +29,6 @@ class Salon(models.Model):
 	gmaps_url = models.URLField(blank=True)
 	avg_rating = models.CharField(max_length=20, blank=True)
 	style_menu = models.ManyToManyField(Style, through='StyleSalon')			#styles provided by the salon
-
 	def __str__(self):
 		return self.salon_name
 
@@ -33,6 +37,7 @@ class StyleSalon(models.Model):
 	salon = models.ForeignKey(Salon)
 	ss_rating = models.CharField(max_length=20, blank=True)			#style-salon rating
 
+@python_2_unicode_compatible
 class User(models.Model):
 	firstname = models.CharField(max_length=200)
 	lastname = models.CharField(max_length=200, blank=True)
@@ -43,7 +48,6 @@ class User(models.Model):
 	user_location = models.CharField(max_length=200, blank=True)
 	login_via = models.CharField(max_length=20)		#fb/insta/gmail
 	history = models.ManyToManyField(StyleSalon, through='UserStyleSalon')		#All the style-salon pairs tried by the user
-
 	def __str__(self):
 		return self.user_email
 
