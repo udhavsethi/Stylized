@@ -23,7 +23,7 @@ class Style(models.Model):
 class Salon(models.Model):
 	salon_name = models.CharField(max_length=200)
 	salon_location = models.CharField(max_length=200)
-	phone_num = models.CharField(max_length=200)		#can store multiple phone numbers
+	salon_phone = models.CharField(max_length=200)								#can store multiple phone numbers
 	salon_email = models.EmailField(blank=True)
 	address = models.TextField()
 	gmaps_url = models.URLField(blank=True)
@@ -41,6 +41,7 @@ class StyleSalon(models.Model):
 class User(models.Model):
 	firstname = models.CharField(max_length=200)
 	lastname = models.CharField(max_length=200, blank=True)
+	user_phone = models.CharField(max_length=200)
 	user_email = models.EmailField(blank=True)
 	password = models.CharField(max_length=200)
 	gender = models.CharField(max_length=20)
