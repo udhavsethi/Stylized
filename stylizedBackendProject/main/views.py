@@ -28,6 +28,15 @@ class SalonForLocation(generics.ListAPIView):
 	def get_queryset(self):
 		return Salon.objects.filter(salon_location=self.args[0]).order_by('avg_rating')
 
+class SalonForStyle(generics.ListAPIView):
+	"""
+	Returns a list of all salons that offer a style X
+	"""
+	serializer_class = SalonSerializer
+
+	def get_queryset(self):
+		return Salon.objects.filter(style_menu=self.kwargs['pk'])
+
 class StyleForCategory(generics.ListAPIView):
 	"""
 	Returns a list of all styles for a category
@@ -41,17 +50,26 @@ class SalonDetail(generics.RetrieveAPIView):
 	"""
 	Returns all details for a single salon
 	"""
-	# queryset = Salon.objects.get(pk)
 	serializer_class = SalonSerializer
 
 	def get_queryset(self):
 		return Salon.objects.filter(pk=self.kwargs['pk'])
 		# return get_object_or_404(Salon, pk=self.kwargs['pk'])
 
+class StyleDetail(generics.RetrieveAPIView):
+	"""
+	Returns all details for a single styles
+	"""
+	serializer_class = StyleSerializer
 
-#Dump:
-# def categoryIndex(request):
-# 	# categories = Category.objects.all()
-# 	categories = Category.objects.get(pk=1)
-# 	# returnn HttpResponse(categories)
-# 	return JsonResponse({"category": "categories.cat_name"})
+	def get_queryset(self):
+		return Style.objects.filter(pk=self.kwargs['pk'])
+
+class UserDetail(generics.RetrieveAPIView):
+	"""
+	Returns details for profile view of the User
+	"""
+	serializer_class = UserSerializer
+
+	def get_queryset(self):
+		return User.objects.filter(pk=self.kwargs['pk'])

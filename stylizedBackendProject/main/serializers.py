@@ -1,6 +1,8 @@
 from .models import Category, Style, Salon, User
 from rest_framework import serializers
 
+#TODO: Review all serializers to add fields/remove unwanted fields
+
 class CategorySerializer(serializers.ModelSerializer):
 	"""
 	Serializing Categories
@@ -31,4 +33,4 @@ class UserSerializer(serializers.ModelSerializer):
 	"""
 	class Meta:
 		model = User
-		fields = ('firstname', 'lastname', 'user_phone', 'user_email', 'password', 'gender', 'age', 'user_location', 'login_via', 'history')
+		fields = ('firstname', 'lastname', 'user_phone', 'user_email', 'gender', 'age', 'user_location', 'login_via', 'bookmarks', 'likes','history')

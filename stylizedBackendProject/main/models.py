@@ -39,15 +39,22 @@ class StyleSalon(models.Model):
 
 @python_2_unicode_compatible
 class User(models.Model):
+	GENDER_CHOICES = (
+		('M', 'Male'),
+		('F', 'Female'),
+		('O', 'Other'),
+	)
 	firstname = models.CharField(max_length=200)
 	lastname = models.CharField(max_length=200, blank=True)
 	user_phone = models.CharField(max_length=200)
 	user_email = models.EmailField(blank=True)
 	password = models.CharField(max_length=200)
-	gender = models.CharField(max_length=20)
+	gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 	age = models.IntegerField(default=0, blank=True)
 	user_location = models.CharField(max_length=200, blank=True)
 	login_via = models.CharField(max_length=20)		#fb/insta/gmail
+	bookmarks = models.ManyToManyField(Style,related_name='bookmarks+')
+	likes = models.ManyToManyField(Style,related_name='likes+')
 	history = models.ManyToManyField(StyleSalon, through='UserStyleSalon')		#All the style-salon pairs tried by the user
 	def __str__(self):
 		return self.user_email
