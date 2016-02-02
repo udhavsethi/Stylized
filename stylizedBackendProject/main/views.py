@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from rest_framework import generics
 from django.http import JsonResponse
 
-from .models import Category, Style, Salon, User
-from main.serializers import CategorySerializer, SalonSerializer, StyleSerializer, UserSerializer
+from .models import Category, Style, Salon, User, StyleSalon, Transaction
+from main.serializers import CategorySerializer, SalonSerializer, StyleSerializer, UserSerializer, StyleSalonSerializer
 
 # Create your views here.
 
@@ -32,10 +32,12 @@ class SalonForStyle(generics.ListAPIView):
 	"""
 	Returns a list of all salons that offer a style X
 	"""
-	serializer_class = SalonSerializer
+	serializer_class = StyleSalonSerializer
 
 	def get_queryset(self):
-		return Salon.objects.filter(style_menu=self.kwargs['pk'])
+		return StyleSalon.objects.filter(style=self.kwargs['pk'])
+		# return StyleSalon.objects.filter(style=self.kwargs['pk']).select_related('salon')
+		# return StyleSalon.objects.filter(salon__style_menu=self.kwargs['pk'])
 
 class StyleForCategory(generics.ListAPIView):
 	"""
@@ -44,7 +46,11 @@ class StyleForCategory(generics.ListAPIView):
 	serializer_class = StyleSerializer
 
 	def get_queryset(self):
-		return Style.objects.filter(category__cat_name=self.args[0])	#TODO: Order the styles by trending or latest
+		#expects names of categories appended with + sign for multiple filtering
+		#TODO: Order the styles by trending or latest
+		cat_list = (self.kwargs['cat_list']).split('+')
+		print(cat_list)
+		return Style.objects.filter(category__cat_name__in=cat_list)
 
 class SalonDetail(generics.RetrieveAPIView):
 	"""
@@ -65,7 +71,7 @@ class StyleDetail(generics.RetrieveAPIView):
 	def get_queryset(self):
 		return Style.objects.filter(pk=self.kwargs['pk'])
 
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateAPIView):
 	"""
 	Returns details for profile view of the User
 	"""
@@ -73,3 +79,11 @@ class UserDetail(generics.RetrieveAPIView):
 
 	def get_queryset(self):
 		return User.objects.filter(pk=self.kwargs['pk'])
+
+
+class UserIndex(generics.ListCreateAPIView):
+	"""
+	Returns a list of all users, allows creating, updating and deleting
+	"""
+	queryset = User.objects.all()
+	serializer_class = UserSerializer

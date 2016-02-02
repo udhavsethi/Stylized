@@ -32,10 +32,13 @@ class Salon(models.Model):
 	def __str__(self):
 		return self.salon_name
 
+@python_2_unicode_compatible
 class StyleSalon(models.Model):
 	style = models.ForeignKey(Style)
 	salon = models.ForeignKey(Salon)
 	ss_rating = models.CharField(max_length=20, blank=True)			#style-salon rating
+	def __str__(self):
+		return '%s | %s' % (self.style, self.salon)
 
 @python_2_unicode_compatible
 class User(models.Model):
@@ -55,15 +58,14 @@ class User(models.Model):
 	login_via = models.CharField(max_length=20)		#fb/insta/gmail
 	bookmarks = models.ManyToManyField(Style,related_name='bookmarks+')
 	likes = models.ManyToManyField(Style,related_name='likes+')
-	history = models.ManyToManyField(StyleSalon, through='UserStyleSalon')		#All the style-salon pairs tried by the user
+	history = models.ManyToManyField(StyleSalon, through='Transaction')		#All the style-salon pairs tried by the user
 	def __str__(self):
 		return self.user_email
 
-class UserStyleSalon(models.Model):
-	user = models.ForeignKey(User)
-	style_salon = models.ForeignKey(StyleSalon)
-	user_rating = models.CharField(max_length=20, blank=True)		#user-salon-style rating
-
+@python_2_unicode_compatible
 class Transaction(models.Model):
 	user = models.ForeignKey(User)
 	style_salon = models.ForeignKey(StyleSalon)
+	user_rating = models.CharField(max_length=20, blank=True)		#user-salon-style rating
+	def __str__(self):
+		return '%s | %s' % (self.user, self.style_salon)
