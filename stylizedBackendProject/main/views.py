@@ -62,7 +62,7 @@ class SalonDetail(generics.RetrieveAPIView):
 		return Salon.objects.filter(pk=self.kwargs['pk'])
 		# return get_object_or_404(Salon, pk=self.kwargs['pk'])
 
-class StyleDetail(generics.RetrieveAPIView):
+class StyleDetail(generics.RetrieveUpdateAPIView):
 	"""
 	Returns all details for a single styles
 	"""

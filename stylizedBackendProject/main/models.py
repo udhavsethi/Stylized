@@ -4,8 +4,10 @@ from django.utils.encoding import python_2_unicode_compatible
 # Create your models here.
 
 @python_2_unicode_compatible
-class Category(models.Model):
+class Category(models.Model): 
 	cat_name = models.CharField(max_length=200)
+	icon_img = models.ImageField(null=True)
+	back_img = models.ImageField(null=True)
 	def __str__(self):
 		return self.cat_name
 
@@ -16,8 +18,15 @@ class Style(models.Model):
 	suitable_for = models.CharField(max_length=20)		#men/women/children
 	description = models.TextField(blank=True)
 	views = models.IntegerField(default=0)
+	likes = models.IntegerField(default=0)
 	def __str__(self):
 		return self.style_name
+
+class StyleImage(models.Model):
+	style = models.ForeignKey(Style, related_name='images')
+	image = models.ImageField(null=True)
+	def __str__(self):
+		return str(self.image)
 
 @python_2_unicode_compatible
 class Salon(models.Model):
@@ -32,11 +41,19 @@ class Salon(models.Model):
 	def __str__(self):
 		return self.salon_name
 
+class SalonImage(models.Model):
+	salon = models.ForeignKey(Salon, related_name='images')
+	image = models.ImageField(null=True)
+	def __str__(self):
+		return str(self.image)
+
 @python_2_unicode_compatible
 class StyleSalon(models.Model):
 	style = models.ForeignKey(Style)
 	salon = models.ForeignKey(Salon)
 	ss_rating = models.CharField(max_length=20, blank=True)			#style-salon rating
+	num_ratings = models.IntegerField(default=0)
+	price = models.DecimalField(max_digits=6, decimal_places=2, default="0.00")
 	def __str__(self):
 		return '%s | %s' % (self.style, self.salon)
 
@@ -59,6 +76,7 @@ class User(models.Model):
 	bookmarks = models.ManyToManyField(Style,related_name='bookmarks+')
 	likes = models.ManyToManyField(Style,related_name='likes+')
 	history = models.ManyToManyField(StyleSalon, through='Transaction')		#All the style-salon pairs tried by the user
+	user_img = models.ImageField(null=True)
 	def __str__(self):
 		return self.user_email
 
@@ -67,5 +85,7 @@ class Transaction(models.Model):
 	user = models.ForeignKey(User)
 	style_salon = models.ForeignKey(StyleSalon)
 	user_rating = models.CharField(max_length=20, blank=True)		#user-salon-style rating
+	datetime = models.DateTimeField()
+	price = models.DecimalField(max_digits=6, decimal_places=2, default="0.00")
 	def __str__(self):
 		return '%s | %s' % (self.user, self.style_salon)

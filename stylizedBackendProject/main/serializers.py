@@ -9,24 +9,26 @@ class CategorySerializer(serializers.ModelSerializer):
 	"""
 	class Meta:
 		model = Category
-		fields = ('id', 'cat_name',)
+		fields = ('id', 'cat_name', 'icon_img', 'back_img')
 
 class SalonSerializer(serializers.ModelSerializer):
 	"""
 	Serializing Salons
 	"""
+	images = serializers.StringRelatedField(many=True)
 	class Meta:
 		model = Salon
-		fields = ('id', 'salon_name', 'salon_location', 'salon_phone', 'salon_email', 'address', 'gmaps_url', 'avg_rating', 'style_menu')
+		fields = ('id', 'salon_name', 'salon_location', 'salon_phone', 'salon_email', 'address', 'gmaps_url', 'avg_rating', 'style_menu', 'images')
 
 class StyleSerializer(serializers.ModelSerializer):
 	"""
 	Serializing Styles
 	"""
 	# id = serializers.ReadOnlyField()
+	images = serializers.StringRelatedField(many=True)
 	class Meta:
 		model = Style
-		fields = ('id', 'category', 'style_name', 'suitable_for', 'description', 'views')
+		fields = ('id', 'category', 'style_name', 'suitable_for', 'description', 'views', 'likes', 'images')
 
 class StyleSalonSerializer(serializers.ModelSerializer):
 	"""
@@ -36,7 +38,7 @@ class StyleSalonSerializer(serializers.ModelSerializer):
 	# salon_detail = serializers.StringRelatedField(source='salon', read_only=True)
 	class Meta:
 		model = StyleSalon
-		fields = ('ss_rating', 'style', 'salon_detail')
+		fields = ('ss_rating', 'num_ratings', 'price', 'style', 'salon_detail')
 
 class TransactionSerializer(serializers.ModelSerializer):
 	"""
@@ -45,7 +47,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 	style_salon_detail = StyleSalonSerializer(source='style_salon')
 	class Meta:
 		model = Transaction
-		fields = ('user_rating', 'user', 'style_salon_detail')
+		fields = ('user_rating', 'user', 'style_salon_detail', 'datetime', 'price')
 
 class UserSerializer(serializers.ModelSerializer):
 	"""
@@ -58,4 +60,4 @@ class UserSerializer(serializers.ModelSerializer):
 	likes_detail = StyleSerializer(source='likes', many=True)
 	class Meta:
 		model = User
-		fields = ('id', 'firstname', 'lastname', 'user_phone', 'user_email', 'gender', 'age', 'user_location', 'login_via', 'bookmarks_detail', 'likes_detail', 'history_detail')
+		fields = ('id', 'firstname', 'lastname', 'user_phone', 'user_email', 'gender', 'age', 'user_location', 'login_via', 'bookmarks_detail', 'likes_detail', 'history_detail', 'user_img')
