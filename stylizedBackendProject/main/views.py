@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from rest_framework import generics
 from django.http import JsonResponse
 
-from .models import Category, Style, Salon, User, StyleSalon, Transaction
+from .models import Category, Style, Salon, User, StyleSalon, Transaction, Trending
 from main.serializers import CategorySerializer, SalonSerializer, StyleSerializer, UserSerializer, StyleSalonSerializer
 
 # Create your views here.
@@ -79,7 +79,6 @@ class UserDetail(generics.RetrieveUpdateAPIView):
 
 	def get_queryset(self):
 		return User.objects.filter(pk=self.kwargs['pk'])
-
 
 class UserIndex(generics.ListCreateAPIView):
 	"""

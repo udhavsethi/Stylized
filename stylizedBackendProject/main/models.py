@@ -49,7 +49,7 @@ class SalonImage(models.Model):
 
 @python_2_unicode_compatible
 class StyleSalon(models.Model):
-	style = models.ForeignKey(Style)
+	style = models.ForeignKey(Style, related_name='salon_offers')
 	salon = models.ForeignKey(Salon)
 	ss_rating = models.CharField(max_length=20, blank=True)			#style-salon rating
 	num_ratings = models.IntegerField(default=0)
@@ -89,3 +89,10 @@ class Transaction(models.Model):
 	price = models.DecimalField(max_digits=6, decimal_places=2, default="0.00")
 	def __str__(self):
 		return '%s | %s' % (self.user, self.style_salon)
+
+@python_2_unicode_compatible
+class Trending(models.Model):
+	style = models.ForeignKey(Style)
+	tagline = models.CharField(max_length=200)
+	def __str__(self):
+		return '%s - %s' % (self.style, self.tagline)
